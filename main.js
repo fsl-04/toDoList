@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []; //Verifica se existe tarefas no localStorage, se não existir, retorna um array vazio
         tarefas.push(tarefa); //Adiciona a tarefa no array
         localStorage.setItem('tarefas', JSON.stringify(tarefas)); //Salva o array no localStorage
+        carregarTarefas();
     }
 
     toDoForm.addEventListener('submit', (evento) => {
@@ -45,7 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         salvarTarefa(newTask);
+        toDoForm.reset();
     })
+
+    window.excluirTarefa = (index) => {
+        const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+        tarefas.splice(index, 1);
+        localStorage.setItem('tarefas', JSON.stringify(tarefas));
+        carregarTarefas();
+    }
+
+    window.editarTarefa = (index) => {
+        const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+        const task = tarefas[index];
+
+        document.getElementById('nomeTarefa').value = task.name;
+        document.getElementById('descricaoTarefa').value = task.description;
+
+        tarefas.splice(index, 1);
+        localStorage.setItem('tarefas', JSON.stringify(tarefas));
+        carregarTarefas();
+    }
 
     carregarTarefas();
 });
